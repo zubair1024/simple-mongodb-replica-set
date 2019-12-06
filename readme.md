@@ -17,16 +17,45 @@
 ```
 var config = {
     _id: "razrnodes", members: [
-        { _id: 0, host: "0.0.0.0:27717" },
-        { _id: 1, host: "0.0.0.0:27718" },
-        { _id: 2, host: "0.0.0.0:27719" }
+        { _id: 0, host: "localhost:27717" },
+        { _id: 1, host: "localhost:27718" },
+        { _id: 2, host: "localhost:27719" }
     ]
 }
 
 rs.initiate(config);
 
-rs.addArb('0.0.0.0:27720');
-rs.addArb('0.0.0.0:27721');
+rs.addArb('localhost:27720');
+rs.addArb('localhost:27721');
+
+
+var admin = db.getSiblingDB("admin")
+admin.createUser(
+  {
+    user: "rootAdmin",
+    pwd: passwordPrompt(), // or cleartext password
+    roles: [ { role: "root", db: "admin" } ]
+  }
+)
+
+var admin = db.getSiblingDB("admin")
+admin.createUser(
+  {
+    user: "userAdmin",
+    pwd: passwordPrompt(), // or cleartext password
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+var admin = db.getSiblingDB("admin")
+admin.createUser(
+  {
+    user: "clusterAdmin",
+    pwd: passwordPrompt(), // or cleartext password
+    roles: [ { role: "clusterAdmin", db: "admin" } ]
+  }
+)
+
 ```
 
 #### Windows Setup 
